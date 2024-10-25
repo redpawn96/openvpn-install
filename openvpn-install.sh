@@ -970,10 +970,11 @@ create_dns_config() {
 			if [ -n "$dns2" ]; then
 				echo "push \"dhcp-option DNS $dns2\"" >> "$OVPN_CONF"
 			fi
+		;;
 		8)
 			echo "dhcp-option DNS $(resolvectl status | grep -oP 'Current DNS Server: \K[^ ]+')" >> "$OVPN_CONF"
 			echo "push \"dhcp-option DNS $(resolvectl status | grep -oP 'Current DNS Server: \K[^ ]+')\"" >> "$OVPN_CONF"
-			echo "push \"push "redirect-gateway def1 bypass-dhcp\"" >> "$OVPN_CONF"
+			echo "push \"redirect-gateway def1 bypass-dhcp\"" >> "$OVPN_CONF"
 		;;
 	esac
 }
