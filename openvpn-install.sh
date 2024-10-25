@@ -284,7 +284,7 @@ check_args() {
 	if [ -n "$dns1" ]; then
 		dns=7
 	else
-		dns=2
+		dns=8
 	fi
 }
 
@@ -642,7 +642,7 @@ select_dns() {
 			read -rp "DNS server [2]: " dns
 		done
 	else
-		dns=2
+		dns=8
 	fi
 	if [ "$dns" = 7 ]; then
 		enter_custom_dns
@@ -970,6 +970,10 @@ create_dns_config() {
 			if [ -n "$dns2" ]; then
 				echo "push \"dhcp-option DNS $dns2\"" >> "$OVPN_CONF"
 			fi
+		8)
+			echo "dhcp-option DNS $(resolvectl status | grep -oP 'Current DNS Server: \K[^ ]+')" >> "$OVPN_CONF"
+			echo "push \"dhcp-option DNS $(resolvectl status | grep -oP 'Current DNS Server: \K[^ ]+')\"" >> "$OVPN_CONF"
+			echo "push \"push "redirect-gateway def1 bypass-dhcp\"" >> "$OVPN_CONF"
 		;;
 	esac
 }
